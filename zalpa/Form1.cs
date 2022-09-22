@@ -16,176 +16,279 @@ namespace zalpa
         {
             InitializeComponent();
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
         private Bitmap bm;
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog fDialog = new OpenFileDialog();
-            fDialog.Filter = "Графические файлы jpg| *.jpg| Графические файлы bmp|*.bmp|Графические файлы png| *. png | Графические файлы gif|*.gif";
             if (fDialog.ShowDialog() == DialogResult.OK)
             {
-                radioButton4.Checked = false;
-                radioButton5.Checked = false;
-                radioButton8.Checked = false;
+
                 try
                 {
+                    radioButton1.Checked = false;
+                    radioButton2.Checked = false;
+                    radioButton3.Checked = false;
+                    radioButton4.Checked = false;
+                    radioButton5.Checked = false;
                     System.IO.FileStream fs = new System.IO.FileStream(fDialog.FileName, System.IO.FileMode.Open);
                     bm = new Bitmap(fs);
                     pictureBox1.Image = bm;
                     fDialog.Dispose();
+                    radioButton1.Checked = true;
+                    radioButton4.Checked = true;
+                    radioButton1_CheckedChanged(sender, e);
                 }
                 catch
                 {
-                    MessageBox.Show("Возможно, файл уже используется другим приложением", "Ошибка!",
-                    System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
                 }
             }
         }
-        private void radioButton4_CheckedChanged_1(object sender, EventArgs e)
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            if ((radioButton4.Checked == true) && (pictureBox1.Image != null))
+            if (radioButton1.Checked == true && pictureBox1.Image != null)
             {
                 groupBox1.Enabled = false;
                 groupBox2.Enabled = false;
                 button1.Enabled = false;
                 Bitmap bmR = (Bitmap)bm.Clone();
                 for (int i = 0; i < bm.Width; i++)
+                {
                     for (int j = 0; j < bm.Height; j++)
                     {
                         System.Drawing.Color color = bm.GetPixel(i, j);
-                        if (radioButton3.Checked == true)
+                        if (radioButton4.Checked == true)
                         {
-                            bmR.SetPixel(i, j, System.Drawing.Color.FromArgb(color.R, 0, 0));
+                            bmR.SetPixel(i, j, GetColor(255, 0, 0, color.R, color.G, color.B));
                         }
                         else
                         {
-                            bmR.SetPixel(i, j, System.Drawing.Color.FromArgb(color.R, color.R, color.R));
+                            bmR.SetPixel(i, j, GetColor(255, 0, 0, color.R, color.G, color.B, isGray: true));
                         }
                     }
-
+                }
                 pictureBox1.Image = bmR;
-                groupBox2.Enabled = true;
                 groupBox1.Enabled = true;
+                groupBox2.Enabled = true;
                 button1.Enabled = true;
             }
             else
+            {
+                radioButton1.Checked = false;
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked == true && pictureBox1.Image != null)
+            {
+                groupBox1.Enabled = false;
+                groupBox2.Enabled = false;
+                button1.Enabled = false;
+                Bitmap bmR = (Bitmap)bm.Clone();
+                for (int i = 0; i < bm.Width; i++)
+                {
+                    for (int j = 0; j < bm.Height; j++)
+                    {
+                        System.Drawing.Color color = bm.GetPixel(i, j);
+                        if (radioButton4.Checked == true)
+                        {
+                            bmR.SetPixel(i, j, GetColor(0, 255, 0, color.R, color.G, color.B));
+                        }
+                        else
+                        {
+                            bmR.SetPixel(i, j, GetColor(0, 255, 0, color.R, color.G, color.B, isGray: true));
+                        }
+                    }
+                }
+                pictureBox1.Image = bmR;
+                groupBox1.Enabled = true;
+                groupBox2.Enabled = true;
+                button1.Enabled = true;
+            }
+            else
+            {
+                radioButton2.Checked = false;
+            }
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton3.Checked == true && pictureBox1.Image != null)
+            {
+                groupBox1.Enabled = false;
+                groupBox2.Enabled = false;
+                button1.Enabled = false;
+                Bitmap bmR = (Bitmap)bm.Clone();
+                for (int i = 0; i < bm.Width; i++)
+                {
+                    for (int j = 0; j < bm.Height; j++)
+                    {
+                        System.Drawing.Color color = bm.GetPixel(i, j);
+                        if (radioButton4.Checked == true)
+                        {
+                            bmR.SetPixel(i, j, GetColor(0, 0, 255, color.R, color.G, color.B));
+                        }
+                        else
+                        {
+                            bmR.SetPixel(i, j, GetColor(0, 0, 255, color.R, color.G, color.B, isGray: true));
+                        }
+                    }
+                }
+                pictureBox1.Image = bmR;
+                groupBox1.Enabled = true;
+                groupBox2.Enabled = true;
+                button1.Enabled = true;
+            }
+            else
+            {
+                radioButton3.Checked = false;
+            }
+        }
+
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton4.Checked == true && pictureBox1.Image == null)
             {
                 radioButton4.Checked = false;
             }
+            else if (radioButton4.Checked == true && pictureBox1.Image != null)
+            {
+                if (radioButton1.Checked == true)
+                {
+                    radioButton1_CheckedChanged(sender, e);
+                }
+                else if (radioButton2.Checked == true)
+                {
+                    radioButton2_CheckedChanged(sender, e);
+                }
+                else if (radioButton3.Checked == true)
+                {
+                    radioButton3_CheckedChanged(sender, e);
+                }
+            }
         }
 
-        private void radioButton5_CheckedChanged_1(object sender, EventArgs e)
+        private void radioButton5_CheckedChanged(object sender, EventArgs e)
         {
-            if ((radioButton5.Checked == true) && (pictureBox1.Image != null))
-            {
-                groupBox1.Enabled = false;
-                groupBox2.Enabled = false;
-                button1.Enabled = false;
-                Bitmap bmG = (Bitmap)bm.Clone();
-                for (int i = 0; i < bm.Width; i++)
-                    for (int j = 0; j < bm.Height; j++)
-                    {
-                        System.Drawing.Color color = bm.GetPixel(i, j);
-                        if (radioButton3.Checked == true)
-                        {
-                            bmG.SetPixel(i, j, System.Drawing.Color.FromArgb(0, color.G, 0));
-                        }
-                        else
-                        {
-                            bmG.SetPixel(i, j, System.Drawing.Color.FromArgb(color.G, color.G, color.G));
-                        }
-                    }
-                pictureBox1.Image = bmG;
-                groupBox2.Enabled = true;
-                groupBox1.Enabled = true;
-                button1.Enabled = true;
-
-            }
-            else
+            if (radioButton5.Checked == true && pictureBox1.Image == null)
             {
                 radioButton5.Checked = false;
             }
+            else if (radioButton5.Checked == true && pictureBox1.Image != null)
+            {
+                if (radioButton1.Checked == true)
+                {
+                    radioButton1_CheckedChanged(sender, e);
+                }
+                else if (radioButton2.Checked == true)
+                {
+                    radioButton2_CheckedChanged(sender, e);
+                }
+                else if (radioButton3.Checked == true)
+                {
+                    radioButton3_CheckedChanged(sender, e);
+                }
+            }
         }
 
-        private void radioButton8_CheckedChanged_1(object sender, EventArgs e)
+        private Color GetColor(int targetR, int targetG, int targetB, int realR, int realG, int realB, bool isGray = false)
         {
-            if ((radioButton8.Checked == true) && (pictureBox1.Image != null))
+            int r = 0;
+            int g = 0;
+            int b = 0;
+            if (!isGray)
             {
-                groupBox1.Enabled = false;
-                groupBox2.Enabled = false;
-                button1.Enabled = false;
-                Bitmap bmB = (Bitmap)bm.Clone();
-                for (int i = 0; i < bm.Width; i++)
-                    for (int j = 0; j < bm.Height; j++)
-                    {
-                        System.Drawing.Color color = bm.GetPixel(i, j);
-                        if (radioButton3.Checked == true)
-                        {
-                            bmB.SetPixel(i, j, System.Drawing.Color.FromArgb(0, 0, color.B));
-
-                        }
-                        else
-                        {
-                            bmB.SetPixel(i, j, System.Drawing.Color.FromArgb(color.B, color.B, color.B));
-
-                        }
-                    }
-                pictureBox1.Image = bmB;
-                groupBox2.Enabled = true;
-                groupBox1.Enabled = true;
-                button1.Enabled = true;
+                r = realR;
+                g = realG;
+                b = realB;
+                if (r >= targetR)
+                {
+                    r = targetR;
+                }
+                if (g >= targetG)
+                {
+                    g = targetG;
+                }
+                if (b >= targetB)
+                {
+                    b = targetB;
+                }
             }
             else
             {
-                radioButton8.Checked = false;
-
-            }
-        }
-
-        private void radioButton3_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-            if ((radioButton3.Checked == true) && (pictureBox1.Image != null))
-            {
-                if (radioButton8.Checked == true)
+                int SetVal = 0;
+                int RMax = 0;
+                int GMax = 0;
+                int BMax = 0;
+                if (realR > 0)
                 {
-                    radioButton8_CheckedChanged_1(sender, e);
+                    RMax = targetR / realR;
                 }
-                else if (radioButton4.Checked == true)
+                if (realG > 0)
                 {
-                    radioButton4_CheckedChanged_1(sender, e);
+                    GMax = targetG / realG;
                 }
-                else if (radioButton5.Checked == true)
+                if (realB > 0)
                 {
-                    radioButton5_CheckedChanged_1(sender, e);
+                    BMax = targetB / realB;
                 }
+                if (BMax > GMax)
+                {
+                    if (BMax > RMax)
+                    {
+                        if (realB < targetB)
+                        {
+                            SetVal = realB;
+                        }
+                        else
+                        {
+                            SetVal = targetB;
+                        }
+                    }
+                    else
+                    {
+                        if (realR < targetR)
+                        {
+                            SetVal = realR;
+                        }
+                        else
+                        {
+                            SetVal = targetR;
+                        }
+                    }
+                }
+                else
+                {
+                    if (GMax > RMax)
+                    {
+                        if (realG < targetG)
+                        {
+                            SetVal = realG;
+                        }
+                        else
+                        {
+                            SetVal = targetG;
+                        }
+                    }
+                    else
+                    {
+                        if (realR < targetR)
+                        {
+                            SetVal = realR;
+                        }
+                        else
+                        {
+                            SetVal = targetR;
+                        }
+                    }
+                }
+                r = SetVal;
+                g = SetVal;
+                b = SetVal;
             }
-        }
-
-        private void radioButton6_CheckedChanged_1(object sender, EventArgs e)
-        {
-
-            {
-                if ((radioButton6.Checked == true) && (pictureBox1.Image != null))
-                    if (radioButton8.Checked == true)
-                    {
-                        radioButton8_CheckedChanged_1(sender, e);
-                    }
-                    else if (radioButton4.Checked == true)
-                    {
-                        radioButton4_CheckedChanged_1(sender, e);
-                    }
-                    else if (radioButton5.Checked == true)
-                    {
-                        radioButton5_CheckedChanged_1(sender, e);
-                    }
-            }
+            return System.Drawing.Color.FromArgb(r, g, b);
         }
     }
 }
